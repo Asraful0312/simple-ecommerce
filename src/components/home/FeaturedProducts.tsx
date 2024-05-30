@@ -1,10 +1,9 @@
+import Wrapper from "@/components/shared/Wrapper";
 import { fetchFeaturedProducts } from "@/features/products/productSlice";
 import { useAppDispatch, useAppSelector } from "@/hooks/useProducts";
-import { Loader2 } from "lucide-react";
-import { useEffect } from "react";
-import Wrapper from "../shared/Wrapper";
+import { SkeletonCard } from "../SkeletonCard";
 import SingleProduct from "../SingleProduct";
-import { ProductType } from "@/utils/types";
+import { useEffect } from "react";
 
 const FeaturedProducts = () => {
   const dispatch = useAppDispatch();
@@ -17,14 +16,17 @@ const FeaturedProducts = () => {
   }, [dispatch]);
 
   const validateData = () => {
-    if (!isError && isLoading) {
+    if (isLoading) {
       return (
-        <div className="flex items-center justify-center absolute inset-x-1/2 top-16">
-          <Loader2 className="size-7 animate-spin flex-shrink-0" />
-        </div>
+        <>
+          <SkeletonCard />
+          <SkeletonCard />
+          <SkeletonCard />
+          <SkeletonCard />
+        </>
       );
     }
-    if (!isLoading && isError) {
+    if (isError) {
       return (
         <div className="absolute left-[44%] whitespace-nowrap text-xl text-red-500">
           {error}
@@ -39,8 +41,8 @@ const FeaturedProducts = () => {
       );
     }
     if (!isLoading && !isError && featuredProducts?.products?.length > 0) {
-      return featuredProducts?.products?.map((product: ProductType) => (
-        <SingleProduct product={product} />
+      return featuredProducts?.products?.map((product) => (
+        <SingleProduct key={product.id} product={product} />
       ));
     }
   };

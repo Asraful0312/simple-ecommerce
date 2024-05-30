@@ -35,6 +35,8 @@ export const fetchFeaturedProducts = createAsyncThunk(
 export const fetchSingleProduct = createAsyncThunk(
   "product/fetchSingleProduct",
   async (id: number) => {
+    console.log(id);
+
     const product = await getSingleProduct(id);
     return product;
   }
